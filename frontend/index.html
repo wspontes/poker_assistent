@@ -16,7 +16,7 @@
 <body>
   <header class="topo">
     <h1>♠ Poker Foto Reconhecimento</h1>
-    <p class="subtitulo">Tire uma foto da mesa e envie. O sistema tenta extrair os dados.</p>
+    <p class="subtitulo">Tire uma foto da mesa. O sistema analisa automaticamente.</p>
   </header>
 
   <main>
@@ -46,13 +46,14 @@
       <p class="dica">Aponte para a tela do PC de modo que toda a mesa fique visível, sem reflexos.</p>
     </section>
 
-    <!-- Passo 2: preview + envio -->
+    <!-- Passo 2: análise automática -->
     <section class="card etapa oculto" id="etapaPreview">
-      <h2>2 · Conferir e enviar</h2>
+      <h2>2 · Foto recebida</h2>
       <div class="preview-foto">
         <img id="previewImg" alt="Prévia da foto tirada" />
       </div>
-      <button class="btn primario btn-grande" id="btnEnviar">Enviar para análise</button>
+      <p class="dica">Análise automática iniciada. Acompanhe o resultado abaixo.</p>
+      <button class="btn primario btn-grande" id="btnEnviar">Analisar novamente</button>
       <button class="btn" id="btnTirarOutra">Tirar outra foto</button>
     </section>
 

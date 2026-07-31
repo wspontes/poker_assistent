@@ -28,6 +28,7 @@ const elAcao = $("acaoSugerida");
 const elStatusServidor = $("statusServidor");
 
 let fotoSelecionada = null;
+let idAnalise = 0;
 
 const NAIPES = { h: "♥", d: "♦", c: "♣", s: "♠" };
 
@@ -127,6 +128,7 @@ elFotoInput.addEventListener("change", async (e) => {
   }
   elPreviewImg.src = URL.createObjectURL(fotoSelecionada);
   mostrarEtapa("preview");
+  analisarFoto();
 });
 
 /* Otimiza a foto antes do upload: redimensiona e comprime para caber
@@ -158,9 +160,12 @@ async function prepararImagem(arquivo) {
 
 /* ---------- Envio ---------- */
 
-elBtnEnviar.addEventListener("click", async () => {
+elBtnEnviar.addEventListener("click", analisarFoto);
+
+async function analisarFoto() {
   if (!fotoSelecionada) return;
 
+  const meuId = ++idAnalise;
   const motor = elMotor.value === "auto" ? "" : elMotor.value;
   const debug = elDebug.checked;
 
@@ -190,16 +195,19 @@ elBtnEnviar.addEventListener("click", async () => {
       throw new Error(`Erro ${resp.status}: ${det}`);
     }
 
+    if (meuId !== idAnalise) return;
     renderResultado(dados);
   } catch (err) {
+    if (meuId !== idAnalise) return;
     elErro.textContent = "Falha ao enviar: " + err.message;
     elErro.classList.remove("oculto");
   } finally {
+    if (meuId !== idAnalise) return;
     elCarregando.classList.add("oculto");
     elBtnEnviar.disabled = false;
-    elBtnEnviar.textContent = "Enviar para análise";
+    elBtnEnviar.textContent = "Analisar novamente";
   }
-});
+}
 
 /* ---------- Sugestão de ação ---------- */
 
