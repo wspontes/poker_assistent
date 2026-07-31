@@ -8,22 +8,16 @@ const elBtnEscolherFoto = $("btnEscolherFoto");
 const elBtnEnviar = $("btnEnviar");
 const elBtnTirarOutra = $("btnTirarOutra");
 const elBtnNovaFoto = $("btnNovaFoto");
-const elMotor = $("motorSelect");
-const elDebug = $("debugToggle");
 const elPreviewImg = $("previewImg");
-const elResultImg = $("resultImg");
 const elEtapaFoto = $("etapaFoto");
 const elEtapaPreview = $("etapaPreview");
 const elEtapaResultado = $("etapaResultado");
 const elCarregando = $("carregando");
 const elErro = $("erroBox");
 const elConteudo = $("resultadoConteudo");
-const elGridDebug = $("gridDebug");
-const elJsonSaida = $("jsonSaida");
 const elResumoMesa = $("resumoMesa");
 const elResumoJogadores = $("resumoJogadores");
 const elResumoObs = $("resumoObs");
-const elJsonRaw = $("jsonRaw");
 const elAcao = $("acaoSugerida");
 const elStatusServidor = $("statusServidor");
 
@@ -166,8 +160,6 @@ async function analisarFoto() {
   if (!fotoSelecionada) return;
 
   const meuId = ++idAnalise;
-  const motor = elMotor.value === "auto" ? "" : elMotor.value;
-  const debug = elDebug.checked;
 
   elErro.classList.add("oculto");
   elConteudo.classList.add("oculto");
@@ -180,8 +172,7 @@ async function analisarFoto() {
     const form = new FormData();
     form.append("arquivo", fotoSelecionada, fotoSelecionada.name || "foto.jpg");
 
-    const url = `/api/reconhecer?debug=${debug}` + (motor ? `&motor=${encodeURIComponent(motor)}` : "");
-    const resp = await fetch(url, { method: "POST", body: form });
+    const resp = await fetch("/api/reconhecer", { method: "POST", body: form });
 
     let dados;
     try {
@@ -247,14 +238,12 @@ function renderAcao(dados) {
 /* ---------- Renderização do resultado ---------- */
 
 function renderResultado(dados) {
-  elResultImg.src = elPreviewImg.src;
   renderAcao(dados);
 
   const mesa = dados.mesa || {};
   const blinds = (mesa.blinds || {});
 
   const metaMotor = [
-    dados.motor_usado ? `motor: ${dados.motor_usado}` : "",
     dados.tempo_ms !== undefined ? `${dados.tempo_ms} ms` : "",
     dados.nota_fallback ? `aviso: ${dados.nota_fallback}` : "",
   ].filter(Boolean).join(" · ");
@@ -319,10 +308,6 @@ function renderResultado(dados) {
     elResumoObs.innerHTML = "";
   }
 
-  elJsonRaw.textContent = JSON.stringify(dados, null, 2);
-  elJsonSaida.textContent = JSON.stringify(dados, null, 2);
-  elGridDebug.classList.toggle("oculto", !elDebug.checked);
-
   elCarregando.classList.add("oculto");
   elConteudo.classList.remove("oculto");
 }
@@ -358,7 +343,7 @@ $("btnInstalar").addEventListener("click", async () => {
   try {
     const resp = await fetch("/api/health");
     const dados = await resp.json();
-    elStatusServidor.textContent = `Servidor OK · motor padrão: ${dados.motor_padrao} · disponíveis: ${dados.motores_disponiveis.join(", ")}`;
+    elStatusServidor.textContent = dados.status === "ok" ? "Servidor OK" : "Servidor indisponível.";
     elStatusServidor.parentElement.classList.add("ok");
   } catch {
     elStatusServidor.textContent = "Servidor não acessível.";

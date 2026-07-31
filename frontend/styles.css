@@ -114,49 +114,15 @@ main {
   text-align: center;
 }
 
-/* Configurações */
-.config .campo {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  font-size: 0.9rem;
-}
-
-.config select {
-  padding: 0.6rem;
-  border-radius: 8px;
-  border: 1px solid var(--borda);
-  background: var(--verde-card-2);
-  color: var(--texto);
-  font-size: 1rem;
-}
-
-.linha-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.6rem;
-  margin-top: 0.8rem;
-  font-size: 0.9rem;
-}
-
-.linha-toggle input {
-  width: 22px;
-  height: 22px;
-  accent-color: var(--dourado);
-}
-
 /* Preview */
-.preview-foto,
-.foto-resultado {
+.preview-foto {
   border-radius: 10px;
   overflow: hidden;
   border: 1px solid var(--borda);
   background: #000;
 }
 
-.preview-foto img,
-.foto-resultado img {
+.preview-foto img {
   display: block;
   width: 100%;
   height: auto;
@@ -460,53 +426,6 @@ main {
 .acao-box.acao-fold .acao-principal { color: #ff8080; }
 .acao-box.acao-check .acao-principal { color: #e8e8a0; }
 
-/* Modo debug: foto + JSON lado a lado */
-.grid-debug {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.8rem;
-  margin-bottom: 1.2rem;
-}
-
-.grid-debug .json-resultado {
-  background: #0d1a10;
-  border: 1px solid var(--borda);
-  border-radius: 10px;
-  padding: 0.6rem;
-  max-height: 45vh;
-  overflow: auto;
-}
-
-#jsonSaida {
-  font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
-  font-size: 0.72rem;
-  color: #b8e0c0;
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-
-.json-raw {
-  margin-top: 1rem;
-}
-
-.json-raw summary {
-  cursor: pointer;
-  color: var(--texto-fraco);
-  font-size: 0.85rem;
-}
-
-.json-raw pre {
-  background: #0d1a10;
-  border: 1px solid var(--borda);
-  border-radius: 10px;
-  padding: 0.7rem;
-  margin-top: 0.5rem;
-  font-size: 0.75rem;
-  color: #b8e0c0;
-  overflow: auto;
-  max-height: 50vh;
-}
-
 footer {
   text-align: center;
   padding: 0.8rem;
@@ -539,9 +458,3 @@ footer.erro {
   color: var(--erro);
 }
 
-@media (min-width: 720px) {
-  .grid-debug {
-    grid-template-columns: 1fr 1fr;
-    align-items: start;
-  }
-}

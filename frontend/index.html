@@ -20,23 +20,6 @@
   </header>
 
   <main>
-    <!-- Configurações -->
-    <section class="card config">
-      <label class="campo">
-        <span>Motor de reconhecimento</span>
-        <select id="motorSelect">
-          <option value="auto">Automático (padrão do servidor)</option>
-          <option value="gemini">Google Gemini (gratuito)</option>
-          <option value="anthropic">Claude (Anthropic)</option>
-          <option value="mock">Mock (teste, sem IA)</option>
-        </select>
-      </label>
-      <label class="linha-toggle">
-        <span>Modo debug (foto + JSON lado a lado)</span>
-        <input type="checkbox" id="debugToggle" />
-      </label>
-    </section>
-
     <!-- Passo 1: foto -->
     <section class="card etapa" id="etapaFoto">
       <h2>1 · Foto da mesa</h2>
@@ -70,23 +53,9 @@
       <div id="resultadoConteudo" class="oculto">
         <div id="acaoSugerida"></div>
 
-        <div class="grid-debug" id="gridDebug">
-          <div class="foto-resultado">
-            <img id="resultImg" alt="Foto enviada" />
-          </div>
-          <div class="json-resultado">
-            <pre id="jsonSaida"></pre>
-          </div>
-        </div>
-
         <div id="resumoMesa"></div>
         <div id="resumoJogadores"></div>
         <div id="resumoObs"></div>
-
-        <details class="json-raw">
-          <summary>Ver JSON completo</summary>
-          <pre id="jsonRaw"></pre>
-        </details>
       </div>
 
       <button class="btn" id="btnNovaFoto">Analisar outra foto</button>
