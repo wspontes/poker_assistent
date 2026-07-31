@@ -115,11 +115,10 @@ SCHEMA = {
 class GeminiEngine(EngineBase):
     nome = "gemini"
 
-    MODELO_PADRAO = "gemini-3.6-flash"
+    MODELO_PADRAO = "gemini-3.1-flash-lite"
     MODELOS_FALLBACK = [
-        "gemini-3.1-flash-lite",
+        "gemini-3.6-flash",
         "gemini-flash-latest",
-        "gemini-2.5-flash-lite",
     ]
 
     def __init__(self):

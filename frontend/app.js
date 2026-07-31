@@ -145,7 +145,7 @@ async function prepararImagem(arquivo) {
       img.src = URL.createObjectURL(arquivo);
     });
   }
-  const MAX = 1600;
+  const MAX = 1280;
   const escala = Math.min(1, MAX / Math.max(fonte.width, fonte.height));
   const largura = Math.max(1, Math.round(fonte.width * escala));
   const altura = Math.max(1, Math.round(fonte.height * escala));
@@ -154,7 +154,7 @@ async function prepararImagem(arquivo) {
   canvas.height = altura;
   canvas.getContext("2d").drawImage(fonte, 0, 0, largura, altura);
   if (fonte.close) fonte.close();
-  const blob = await new Promise((res) => canvas.toBlob(res, "image/jpeg", 0.82));
+  const blob = await new Promise((res) => canvas.toBlob(res, "image/jpeg", 0.78));
   return new File([blob], "foto_otimizada.jpg", { type: "image/jpeg" });
 }
 
