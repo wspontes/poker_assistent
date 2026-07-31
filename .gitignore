@@ -7,3 +7,6 @@ backend/resp.json
 backend/t.png
 backend/teste.png
 backend/mesa_teste.png
+
+.vercel
+.env*
