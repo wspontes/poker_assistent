@@ -47,7 +47,7 @@ def health():
         "api_key_configurada": bool(os.getenv("ANTHROPIC_API_KEY")),
         "modelo_anthropic": os.getenv("ANTHROPIC_MODEL", "claude-3-5-sonnet-latest"),
         "gemini_key_configurada": bool(os.getenv("GEMINI_API_KEY")),
-        "modelo_gemini": os.getenv("GEMINI_MODEL", "gemini-3.6-flash"),
+        "modelo_gemini": os.getenv("GEMINI_MODEL", "gemini-3.1-flash-lite"),
     }
 
 
