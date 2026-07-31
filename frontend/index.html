@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b1e0f" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Poker Foto" />
+  <title>Poker Foto — Reconhecimento</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topo">
+    <h1>♠ Poker Foto Reconhecimento</h1>
+    <p class="subtitulo">Tire uma foto da mesa e envie. O sistema tenta extrair os dados.</p>
+  </header>
+
+  <main>
+    <!-- Configurações -->
+    <section class="card config">
+      <label class="campo">
+        <span>Motor de reconhecimento</span>
+        <select id="motorSelect">
+          <option value="auto">Automático (padrão do servidor)</option>
+          <option value="gemini">Google Gemini (gratuito)</option>
+          <option value="anthropic">Claude (Anthropic)</option>
+          <option value="mock">Mock (teste, sem IA)</option>
+        </select>
+      </label>
+      <label class="linha-toggle">
+        <span>Modo debug (foto + JSON lado a lado)</span>
+        <input type="checkbox" id="debugToggle" />
+      </label>
+    </section>
+
+    <!-- Passo 1: foto -->
+    <section class="card etapa" id="etapaFoto">
+      <h2>1 · Foto da mesa</h2>
+      <input type="file" id="fotoInput" accept="image/*" capture="environment" hidden />
+      <button class="btn primario btn-grande" id="btnTirarFoto">📷 Tirar foto da mesa</button>
+      <button class="btn" id="btnEscolherFoto">Escolher foto da galeria</button>
+      <p class="dica">Aponte para a tela do PC de modo que toda a mesa fique visível, sem reflexos.</p>
+    </section>
+
+    <!-- Passo 2: preview + envio -->
+    <section class="card etapa oculto" id="etapaPreview">
+      <h2>2 · Conferir e enviar</h2>
+      <div class="preview-foto">
+        <img id="previewImg" alt="Prévia da foto tirada" />
+      </div>
+      <button class="btn primario btn-grande" id="btnEnviar">Enviar para análise</button>
+      <button class="btn" id="btnTirarOutra">Tirar outra foto</button>
+    </section>
+
+    <!-- Passo 3: resultado -->
+    <section class="card etapa oculto" id="etapaResultado">
+      <h2>3 · Resultado</h2>
+      <div id="carregando" class="oculto">
+        <div class="spinner"></div>
+        <p>Analisando a foto... pode levar alguns segundos.</p>
+      </div>
+
+      <div id="erroBox" class="oculto"></div>
+
+      <div id="resultadoConteudo" class="oculto">
+        <div id="acaoSugerida"></div>
+
+        <div class="grid-debug" id="gridDebug">
+          <div class="foto-resultado">
+            <img id="resultImg" alt="Foto enviada" />
+          </div>
+          <div class="json-resultado">
+            <pre id="jsonSaida"></pre>
+          </div>
+        </div>
+
+        <div id="resumoMesa"></div>
+        <div id="resumoJogadores"></div>
+        <div id="resumoObs"></div>
+
+        <details class="json-raw">
+          <summary>Ver JSON completo</summary>
+          <pre id="jsonRaw"></pre>
+        </details>
+      </div>
+
+      <button class="btn" id="btnNovaFoto">Analisar outra foto</button>
+    </section>
+  </main>
+
+  <footer>
+    <span id="statusServidor">Verificando servidor…</span>
+  </footer>
+
+  <button class="instalar-pwa oculto" id="btnInstalar">📲 Instalar app</button>
+
+  <script src="app.js"></script>
+</body>
+</html>

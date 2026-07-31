@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.venv/
+.env
+backend/server.log*
+backend/resp.json
+backend/t.png
+backend/teste.png
+backend/mesa_teste.png
