@@ -3,9 +3,17 @@
 Recebe o JSON normalizado do reconhecimento e devolve um dicionario
 "acao_sugerida" com base em: forca da mao (pre-flop / pos-flop),
 pot odds para pagar e situacao do heroi na rodada.
+
+A equity usa Monte Carlo vetorizado (NumPy) quando disponivel; se nao,
+cai no heurístico deterministico.
 """
 from collections import Counter
 from itertools import combinations
+
+try:
+    from montecarlo import equity as _mc_equity
+except Exception:
+    _mc_equity = None
 
 RANKS = "23456789tjqka"
 RANK_VAL = {r: i for i, r in enumerate(RANKS)}
@@ -150,6 +158,20 @@ def _sem_informacao(motivo):
     return {"acao": "sem_informacao", "motivo": motivo}
 
 
+N_MC = 20000
+
+
+def _equity_monte_carlo(cartas_hero, board_par):
+    """Equity real via MC (0..1) ou None se o modulo NumPy nao estiver disponivel."""
+    if _mc_equity is None:
+        return None
+    try:
+        eq = _mc_equity(cartas_hero, board_par, n_hands=N_MC)
+        return max(0.0, min(eq, 1.0))
+    except Exception:
+        return None
+
+
 def avaliar(resultado: dict) -> dict:
     mesa = resultado.get("mesa") or {}
     jogadores = resultado.get("jogadores") or []
@@ -182,9 +204,18 @@ def avaliar(resultado: dict) -> dict:
     para_chamar = max(0, max_bet - hero_bet)
 
     if board_par:
-        equity, desc, _score = _equity_posflop(cartas_hero, board_par)
+        equity = _equity_monte_carlo(cartas_hero, board_par)
+        if equity is None:
+            equity, desc, _score = _equity_posflop(cartas_hero, board_par)
+        else:
+            _score = melhor_mao(cartas_hero + board_par)
+            desc = CATEGORIA[_score[0]]
     else:
-        equity, desc = _preflop(cartas_hero)
+        equity = _equity_monte_carlo(cartas_hero, [])
+        if equity is None:
+            equity, desc = _preflop(cartas_hero)
+        else:
+            desc = _preflop(cartas_hero)[1]
         _score = None
 
     r = {"forca_mao": desc, "equity_estimada": round(equity, 2), "pot_odds": None}
