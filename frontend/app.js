@@ -114,13 +114,47 @@ elBtnNovaFoto.addEventListener("click", () => {
   mostrarEtapa("foto");
 });
 
-elFotoInput.addEventListener("change", (e) => {
+elFotoInput.addEventListener("change", async (e) => {
   const arquivo = e.target.files && e.target.files[0];
   if (!arquivo) return;
-  fotoSelecionada = arquivo;
-  elPreviewImg.src = URL.createObjectURL(arquivo);
+  elBtnEnviar.disabled = true;
+  try {
+    fotoSelecionada = await prepararImagem(arquivo);
+  } catch {
+    fotoSelecionada = arquivo;
+  } finally {
+    elBtnEnviar.disabled = false;
+  }
+  elPreviewImg.src = URL.createObjectURL(fotoSelecionada);
   mostrarEtapa("preview");
 });
+
+/* Otimiza a foto antes do upload: redimensiona e comprime para caber
+   no limite de corpo de request (Vercel ~4.5MB) e acelerar a analise. */
+async function prepararImagem(arquivo) {
+  let fonte;
+  try {
+    fonte = await createImageBitmap(arquivo, { imageOrientation: "from-image" });
+  } catch {
+    fonte = await new Promise((res, rej) => {
+      const img = new Image();
+      img.onload = () => res(img);
+      img.onerror = rej;
+      img.src = URL.createObjectURL(arquivo);
+    });
+  }
+  const MAX = 1600;
+  const escala = Math.min(1, MAX / Math.max(fonte.width, fonte.height));
+  const largura = Math.max(1, Math.round(fonte.width * escala));
+  const altura = Math.max(1, Math.round(fonte.height * escala));
+  const canvas = document.createElement("canvas");
+  canvas.width = largura;
+  canvas.height = altura;
+  canvas.getContext("2d").drawImage(fonte, 0, 0, largura, altura);
+  if (fonte.close) fonte.close();
+  const blob = await new Promise((res) => canvas.toBlob(res, "image/jpeg", 0.82));
+  return new File([blob], "foto_otimizada.jpg", { type: "image/jpeg" });
+}
 
 /* ---------- Envio ---------- */
 
